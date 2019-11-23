@@ -1,9 +1,10 @@
-
+import pytesseract
 import numpy as np
 import obj
 import cv2
+from PIL import Image
 
-img = cv2.imread('testim2.png')
+img = cv2.imread('testim3.png')
 hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 colors=obj.ColRange()
 kernel=np.ones((3,3),np.uint8)
@@ -49,8 +50,11 @@ elif len(approx) > 15:
 
 crop=img[y:y+h, x:x+w]
 cv2.imshow("cropped",crop)
+tessdata_dir_config = '--tessdata-dir "/usr/local/Cellar/tesseract/4.1.0/share/tessdata" -l eng --psm 10 --oem 1'
+arr = Image.fromarray(crop)
+result = pytesseract.image_to_string(arr,lang='eng',config = tessdata_dir_config)
 #cv2.drawContours(img,[c],0,(0,0,0),5)       
-
+print(result)
 cv2.imshow('img',img)
 cv2.imwrite("changed2.png",img)
 cv2.waitKey(0)
